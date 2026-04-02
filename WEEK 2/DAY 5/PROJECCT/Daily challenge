@@ -1,0 +1,50 @@
+import random
+
+class Card:
+    def __init__(self, suit, value):
+        """Initialize card with suit and value."""
+        self.suit = suit
+        self.value = value
+
+    def __repr__(self):
+        # Provides a readable string representation (e.g., "A of Hearts")
+        return f"{self.value} of {self.suit}"
+
+class Deck:
+    def __init__(self):
+        """Initialize the deck and fill it with 52 cards."""
+        self.cards = []
+        self.reset_deck()
+
+    def reset_deck(self):
+        """Helper method to generate a full set of 52 cards."""
+        suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
+        values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        # Use nested loops or list comprehension to build the deck
+        self.cards = [Card(s, v) for s in suits for v in values]
+
+    def shuffle(self):
+        """Ensure the deck is full, then rearrange randomly."""
+        if len(self.cards) < 52:
+            print("Deck is incomplete. Resetting to 52 cards before shuffling...")
+            self.reset_deck()
+        
+        random.shuffle(self.cards)
+        print("Deck shuffled!")
+
+    def deal(self):
+        """Remove and return a single card from the deck."""
+        if len(self.cards) == 0:
+            return "No cards left in the deck."
+        
+        # pop() removes and returns the last item in the list
+        return self.cards.pop()
+
+# --- Testing the Deck ---
+my_deck = Deck()
+my_deck.shuffle()
+
+print(f"Dealt card: {my_deck.deal()}")
+print(f"Dealt card: {my_deck.deal()}")
+print(f"Cards remaining: {len(my_deck.cards)}")
+
