@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coloring Todo List</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <form id="taskForm">
+        <input type="text" id="taskInput" placeholder="Enter a new task..." required>
+        <button type="submit" id="addBtn">Submit</button>
+    </form>
+
+    <div class="listTasks"></div>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+.listTasks { margin-top: 20px; }
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.fa-xmark { color: gray; cursor: pointer; }
+.fa-xmark:hover { color: red; }
+
+/* Bonus I: Style for completed tasks */
+.is-done {
+    text-decoration: line-through;
+    color: red;
+}
+    </style>
+
+    <script>
+       const tasks = [];
+let idCounter = 0;
+
+const form = document.getElementById('taskForm');
+const input = document.getElementById('taskInput');
+const listDiv = document.querySelector('.listTasks');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Stop page refresh
+    addTask();
+});
+
+function addTask() {
+    const text = input.value.trim();
+    
+    if (text === "") return; // Check not empty
+
+    // Create Task Object (Bonus I)
+    const newTask = {
+        task_id: idCounter,
+        text: text,
+        done: false
+    };
+
+    tasks.push(newTask);
+    renderTask(newTask);
+    
+    idCounter++;
+    input.value = ""; // Clear input
+}
+
+function renderTask(task) {
+    const taskContainer = document.createElement('div');
+    taskContainer.classList.add('task-item');
+    taskContainer.setAttribute('data-task-id', task.task_id);
+
+    // 1. The Delete Button (Bonus II)
+    const deleteBtn = document.createElement('i');
+    deleteBtn.classList.add('fa-solid', 'fa-xmark');
+    deleteBtn.addEventListener('click', () => deleteTask(task.task_id, taskContainer));
+
+    // 2. The Checkbox (Bonus I)
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.addEventListener('change', () => doneTask(task.task_id, taskLabel));
+
+    // 3. The Label
+    const taskLabel = document.createElement('label');
+    taskLabel.innerText = task.text;
+
+    // Append to container
+    taskContainer.appendChild(deleteBtn);
+    taskContainer.appendChild(checkbox);
+    taskContainer.appendChild(taskLabel);
+
+    // Add to DOM
+    listDiv.appendChild(taskContainer);
+}
+
+// BONUS I: Toggle Done state
+function doneTask(id, labelElement) {
+    const taskIndex = tasks.findIndex(t => t.task_id === id);
+    if (taskIndex > -1) {
+        tasks[taskIndex].done = !tasks[taskIndex].done;
+        labelElement.classList.toggle('is-done');
+    }
+}
+
+// BONUS II: Delete task
+function deleteTask(id, element) {
+    const taskIndex = tasks.findIndex(t => t.task_id === id);
+    if (taskIndex > -1) {
+        tasks.splice(taskIndex, 1); // Remove from array
+        element.remove(); // Remove from DOM
+    }
+} // Your JavaScript code will go here
+    </script>
+</body>
+</html>
