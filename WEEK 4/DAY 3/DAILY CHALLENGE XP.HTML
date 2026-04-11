@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JSON Form Exercise</title>
+</head>
+<body>
+
+    <form id="userForm">
+        <input type="text" id="firstname" placeholder="First Name" required>
+        <input type="text" id="lastname" placeholder="Last Name" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <h3>Output:</h3>
+    <div id="results"></div>
+
+    <script src="script.js">
+        // script.js
+
+// 1. Select the elements
+const form = document.getElementById('userForm');
+const displayArea = document.getElementById('results');
+
+// 2. Add the event listener
+form.addEventListener('submit', function(event) {
+    // Prevent the form from submitting to a server/reloading
+    event.preventDefault();
+
+    // 3. Retrieve the data from the inputs
+    const fname = document.getElementById('firstname').value;
+    const lname = document.getElementById('lastname').value;
+
+    // 4. Create an object to hold the data
+    const userData = {
+        name: fname,
+        lastname: lname
+    };
+
+    // 5. Convert the object to a JSON string
+    const jsonString = JSON.stringify(userData);
+
+    // 6. Append it to the DOM
+    displayArea.textContent = jsonString;
+});
+    </script>
+</body>
+</html>
