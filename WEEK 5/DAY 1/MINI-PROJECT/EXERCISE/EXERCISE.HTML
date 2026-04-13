@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars AJAX App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Star Wars Character Finder</h1>
+        <div id="content">
+            <p>Click the button to find a character!</p>
+        </div>
+        <button id="fetch-btn">Find Character</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+// 1. Retrieve elements from the DOM 
+const contentDiv = document.getElementById('content');
+const btn = document.getElementById('fetch-btn');
+
+// 2. Function to get data from API
+async function getStarWarsCharacter(){
+    displayLoading();
+    
+    // Generate a random ID (SWAPI has ~83 characters)
+    const randomId = Math.floor(Math.random() * 83) + 1;
+
+    try {
+        const response = await fetch(`https://www.swapi.tech/api/people/${randomId}`);
+        
+        if (!response.ok) throw new Error("Character not found");
+
+        const data = await response.json();
+        const character = data.result.properties;
+
+        // Fetch Homeworld Name (it comes as a URL)
+        const homeWorldResponse = await fetch(character.homeworld);
+        const homeWorldData = await homeWorldResponse.json();
+        const homeWorldName = homeWorldData.result.properties.name;
+
+        // 3. Display info on the DOM
+        displayCharacter(character, homeWorldName);
+
+    } catch (error) {
+        displayError();
+    }
+}
+
+function displayLoading() {
+    contentDiv.innerHTML = `
+        <div class="loading">
+            <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+            <p>Searching the galaxy...</p>
+        </div>
+    `;
+}
+
+function displayCharacter(char, planet) {
+    contentDiv.innerHTML = `
+        <h2>${char.name}</h2>
+        <p><strong>Height:</strong> ${char.height}</p>
+        <p><strong>Gender:</strong> ${char.gender}</p>
+        <p><strong>Birth Year:</strong> ${char.birth_year}</p>
+        <p><strong>Home World:</strong> ${planet}</p>
+    `;
+}
+
+function displayError() {
+    contentDiv.innerHTML = `
+        <div class="error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p>Oh No! That person isn't in the records.</p>
+        </div>
+    `;
+}
+
+// Event Listener
+btn.addEventListener('click', getStarWarsCharacter);
+
+body {
+    background-color: #1a1a1a;
+    color: #ffe81f; /* Star Wars Yellow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #2b2b2b;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    width: 350px;
+}
+
+button {
+    background-color: #ffe81f;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.loading i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.error {
+    color: #ff4d4d;
+}
