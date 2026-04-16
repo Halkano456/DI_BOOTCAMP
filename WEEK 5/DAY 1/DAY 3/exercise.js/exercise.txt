@@ -1,0 +1,137 @@
+class Employee {
+    private name: string;
+    private salary: number;
+    public position: string;
+    protected department: string;
+
+    constructor(name: string, salary: number, position: string, department: string) {
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
+        this.department = department;
+    }
+
+    public getEmployeeInfo(): string {
+        return `Employee: ${this.name}, Position: ${this.position}`;
+    }
+}
+
+class Product {
+    readonly id: number;
+    public name: string;
+    public price: number;
+
+    constructor(id: number, name: string, price: number) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }Daily Challenge: Building a Library System with TypeScript Classes and Interfaces
+
+
+👩‍🏫 👩🏿‍🏫 What You’ll learn
+How to design and use TypeScript classes and interfaces.
+How to apply access modifiers to control access to properties and methods.
+How to use optional and readonly properties in interfaces.
+How to implement basic inheritance to extend class functionality.
+
+
+Instructions
+Create a simple library system with TypeScript:
+
+Interface Book: Define an interface Book with the following properties:
+
+title (string)
+author (string)
+isbn (string)
+publishedYear (number)
+An optional genre property (string)
+Class Library: Create a class Library with:
+
+A private property books (array of Book).
+A public method addBook to add a new book to the library.
+A public method getBookDetails that returns details of a book based on the isbn.
+Class DigitalLibrary: Create a class DigitalLibrary that extends Library and adds:
+
+A readonly property website (string) for the library’s website.
+A public method listBooks that returns a list of all book titles in the library.
+Create an instance of DigitalLibrary, add some books to it, and then print out the details of the books and the list of all book titles.
+
+
+
+    getProductInfo(): string {
+        return `Product: ${this.name}, Price: $${this.price}`;
+    }
+}
+
+const myProduct = new Product(101, "Mechanical Keyboard", 150);
+
+// Attempting to modify 'id' will result in a TypeScript error:
+// myProduct.id = 202; // Error: Cannot assign to 'id' because it is a read-only property.
+
+class Animal {
+    public name: string;
+
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    makeSound(): string {
+        return "Some generic animal sound";
+    }
+}
+
+class Dog extends Animal {
+    constructor(name: string) {
+        super(name); // Must call the parent constructor
+    }
+
+    override makeSound(): string {
+        return "bark";
+    }
+}
+
+const myDog = new Dog("Buddy");
+console.log(myDog.makeSound()); // Output: bark
+
+class Calculator {
+    static add(a: number, b: number): number {
+        return a + b;
+    }
+
+    static subtract(a: number, b: number): number {
+        return a - b;
+    }
+}
+
+// Call without instantiating
+console.log(Calculator.add(10, 5));      // Output: 15
+console.log(Calculator.subtract(10, 5)); // Output: 5
+
+interface User {
+    readonly id: number;
+    name: string;
+    email: string;
+}
+
+interface PremiumUser extends User {
+    membershipLevel?: string; // The '?' makes it optional
+}
+
+function printUserDetails(user: PremiumUser): void {
+    console.log(`ID: ${user.id}, Name: ${user.name}, Email: ${user.email}`);
+    if (user.membershipLevel) {
+        console.log(`Membership: ${user.membershipLevel}`);
+    } else {
+        console.log("Membership: Standard");
+    }
+}
+
+const vipUser: PremiumUser = {
+    id: 1,
+    name: "Alice",
+    email: "alice@example.com",
+    membershipLevel: "Gold"
+};
+
+printUserDetails(vipUser);
+
