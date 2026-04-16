@@ -1,0 +1,91 @@
+type Person = {
+  name: string;
+  age: number;
+};
+
+type Address = {
+  street: string;
+  city: string;
+};
+
+// Combining Person and Address
+type PersonWithAddress = Person & Address;
+
+const user: PersonWithAddress = {
+  name: "Alice",
+  age: 30,
+  street: "123 Maple St",
+  city: "Wonderland"
+};
+
+function describeValue(value: number | string): string {
+  if (typeof value === "number") {
+    return "This is a number";
+  } else {
+    // TypeScript knows value must be a string here
+    return "This is a string";
+  }
+}
+
+let someValue: any = "Hello TypeScript!";
+
+// Using the 'as' syntax (preferred)
+let strLength: number = (someValue as string).length;
+
+// Using the angle-bracket syntax (less common in React/JSX)
+let strLengthAlt: number = (<string>someValue).length;
+
+console.log(strLength);
+
+function getFirstElement(arr: (number | string)[]): string {
+  // We assert that the result of the index access is a string
+  return arr[0] as string;
+}
+
+const mixed = ["First", 2, "Third"];
+console.log(getFirstElement(mixed).toUpperCase()); // "FIRST"
+
+interface HasLength {
+  length: number;
+}
+
+function logLength<T extends HasLength>(item: T): void {
+  console.log(`Length: ${item.length}`);
+}
+
+logLength("Hello"); // Works (string has length)
+logLength([1, 2, 3]); // Works (array has length)
+// logLength(10); // Error: number does not have a length property
+
+type PersonBasic = { name: string; age: number };
+type Job = { position: "Manager" | "Developer"; department: string };
+
+type Employee = PersonBasic & Job;
+
+function describeEmployee(emp: Employee): string {
+  if (emp.position === "Manager") {
+    return `${emp.name} oversees the ${emp.department} department.`;
+  } else {
+    return `${emp.name} is a developer in ${emp.department}.`;
+  }
+}
+
+const dev: Employee = { 
+  name: "Leo", age: 25, position: "Developer", department: "Engineering" 
+};
+console.log(describeEmployee(dev));
+
+interface Stringable {
+  toString(): string;
+}
+
+function formatInput<T extends Stringable>(input: T): string {
+  // Using type assertion to treat input as a string for a hypothetical formatter
+  const val = (input as unknown) as string; 
+  return `Fo
+  
+  rmatted: ${val.toString()}`;
+}
+
+console.log(formatInput(123)); // "Formatted: 123"
+console.log(formatInput(true)); // "Formatted: true"
