@@ -17,52 +17,6 @@ router.get('/', (req, res) => {
   res.send('Welcome to the Homepage');
 });
 
-router.get('/about', (req, res) => {
-  res.send('About Us Page');
-});
-
-module.exports = router;
-
-const express = require('express');
-const app = express();
-
-app.use(express.json());
-
-const todosRouter = require('./routes/todos');
-
-app.use('/todos', todosRouter);
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-const express = require('express');
-const router = express.Router();
-
-let todos = [];
-let id = 1;
-
-// GET all todos
-router.get('/', (req, res) => {
-  res.json(todos);
-});
-
-// CREATE todo
-router.post('/', (req, res) => {
-  const todo = {
-    id: id++,
-    task: req.body.task
-  };
-  todos.push(todo);
-  res.json(todo);
-});
-
-// UPDATE todo
-router.put('/:id', (req, res) => {
-  const todo = todos.find(t => t.id == req.params.id);
-  if (!todo) return res.status(404).send('Todo not found');
-
   todo.task = req.body.task;
   res.json(todo);
 });
